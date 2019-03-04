@@ -21,7 +21,7 @@ const SerialPort = require('serialport');
 const Readline = SerialPort.parsers.Readline;
 const parser = new Readline();
 
-const mySerial = new SerialPort('COM3', {
+const mySerial = new SerialPort('COM21', {
   baudRate: 9600
 });
 
@@ -37,12 +37,22 @@ parser.on('data', function (data) {
   var data_array = data_str.split(","); 
   console.log(data.toString());
   
-  io.emit('arduino:data', {
+  io.emit('arduino:data0', {
     value: data_array[0]
   });
   io.emit('arduino:data1', {
     value: data_array[1]
   });
+  io.emit('arduino:data2', {
+    value: data_array[2]
+  });
+  io.emit('arduino:data3', {
+    value: data_array[3]
+  });
+  io.emit('arduino:data4', {
+    value: data_array[4]
+  });
+
 });
 
 mySerial.on('err', function (data) {
