@@ -18,35 +18,29 @@
         <div class="col-md-4">
           <img class="img-responsive" src="https://biz.prlog.org/Tec-de-Monterrey/logo.jpg">
         </div>
-        <div class="col-md-4"></div>
+      </div>
+      <div class="row">
+        <div class="col-md-2"></div>
         <div class="col-md-4">
-          <img class="img-responsive" src="http://www.cesmorelos.gob.mx/ces/assets/images/ces.png" style="width: 200px; padding-top:48px;">
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-md-12">
-          <h2 style="color:red; visibility:hidden;" id="disconnected"></h2>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-md-1"></div>
-        <div class="col-md-5">
           <canvas id="chart0"></canvas>
         </div>
-        <div class="col-md-5">
+        <div class="col-md-4">
           <canvas id="chart1"></canvas>
         </div>
-        <div class="col-md-1"></div>
+        <div class="col-md-2"></div>
       </div>
       <div class="row">
-        <div class="col-md-1"></div>
-        <div class="col-md-5">
+        <div class="col-md-6">
           <canvas id="chart2"></canvas>
         </div>
-        <div class="col-md-5">
+        <div class="col-md-6">
           <canvas id="chart3"></canvas>
         </div>
-        <div class="col-md-1"></div>
+      </div>
+      <div class="row">
+        <div class="col-md-6">
+          <canvas id="chart4"></canvas>
+        </div>
       </div>
     </div>
 
@@ -54,17 +48,11 @@
     <script src="/socket.io/socket.io.js" charset="utf-8"></script>
     <script type="text/javascript">
       const socket = io();
-      
-      var data_array0 =  Array(10);var data_array1 =  Array(10);
-      var data_array2 =  Array(10);var data_array3 =  Array(10);
-      
-      var ok0 = 1;var ok1 = 1;var ok2 = 1;var ok3 = 1;
-      
       var ctx0 = document.getElementById('chart0').getContext('2d');
       var ctx1 = document.getElementById('chart1').getContext('2d');
       var ctx2 = document.getElementById('chart2').getContext('2d');
       var ctx3 = document.getElementById('chart3').getContext('2d');
-      //var ctx4 = document.getElementById('chart4').getContext('2d');
+      var ctx4 = document.getElementById('chart4').getContext('2d');
       
       var chart0 = new Chart(ctx0, {
           // The type of chart we want to create
@@ -73,7 +61,7 @@
           data: {
               labels: ["Values"],
               datasets: [{
-                  label: "Nivel",
+                  label: "Serial from A0",
                   backgroundColor: 'rgb(52, 73, 94)',
                   borderColor: 'rgb(41, 128, 185)',
                   data: [],
@@ -85,20 +73,11 @@
       let counter0 = 0 ;
       socket.on('arduino:data0', function (dataSerial0) {
         // console.log(dataSerial);
-        if(dataSerial0.value === "-1"){
-          document.getElementById("disconnected").innerHTML="Sensor de nivel desconectado";
-          document.getElementById("disconnected").style.visibility="visible";
-          ok0 = 0;
-        }else{
-          ok0 = 1;
-        }
-        
-        data_array0.shift();data_array0.push(dataSerial0.value);
-        
-        chart0.data.labels = [1,2,3,4,5,6,7,8,9,10];
+        chart0.data.labels.push(counter0);
         chart0.data.datasets.forEach(dataset => {
-          dataset.data = data_array0;
+          dataset.data.push(dataSerial0.value);
         });
+        counter0++;
         chart0.update();
       });
 
@@ -109,7 +88,7 @@
           data: {
               labels: ["Values"],
               datasets: [{
-                  label: "Humedad",
+                  label: "Serial from A1",
                   backgroundColor: 'rgb(236, 50, 50)',
                   borderColor: 'rgb(222, 50, 50)',
                   data: [],
@@ -121,19 +100,11 @@
       let counter1 = 0 ;
       socket.on('arduino:data1', function (dataSerial1) {
         // console.log(dataSerial);
-        if(dataSerial1.value === "-1"){
-          document.getElementById("disconnected").innerHTML="Sensor de Humedad desconectado";
-          document.getElementById("disconnected").style.visibility="visible";
-          ok1 = 0;
-        }else{
-          ok1 = 1;
-        }
-        data_array1.shift();data_array1.push(dataSerial1.value);
-        
-        chart1.data.labels = [1,2,3,4,5,6,7,8,9,10];
+        chart1.data.labels.push(counter1);
         chart1.data.datasets.forEach(dataset => {
-          dataset.data = data_array1;
+          dataset.data.push(dataSerial1.value);
         });
+        counter1++;
         chart1.update();
       });
 
@@ -144,7 +115,7 @@
           data: {
               labels: ["Values"],
               datasets: [{
-                  label: "Temperatura",
+                  label: "Serial from A2",
                   backgroundColor: 'rgb(192, 23, 158)',
                   borderColor: 'rgb(172, 23, 158)',
                   data: [],
@@ -156,19 +127,11 @@
       let counter2 = 0 ;
       socket.on('arduino:data2', function (dataSerial2) {
         // console.log(dataSerial);
-        if(dataSerial2.value === "-1"){
-          document.getElementById("disconnected").innerHTML="Sensor de temperatura desconectado";
-          document.getElementById("disconnected").style.visibility="visible";
-          ok2 = 0;
-        }else{
-          ok2 = 1;
-        }
-        data_array2.shift();data_array2.push(dataSerial2.value);
-        
-        chart2.data.labels = [1,2,3,4,5,6,7,8,9,10];
+        chart2.data.labels.push(counter2);
         chart2.data.datasets.forEach(dataset => {
-          dataset.data = data_array2;
+          dataset.data.push(dataSerial2.value);
         });
+        counter2++;
         chart2.update();
       });
 
@@ -179,7 +142,7 @@
           data: {
               labels: ["Values"],
               datasets: [{
-                  label: "Movimiento",
+                  label: "Serial from A3",
                   backgroundColor: 'rgb(23, 153, 192)',
                   borderColor: 'rgb(3, 153, 192)',
                   data: [],
@@ -191,27 +154,14 @@
       let counter3 = 0 ;
       socket.on('arduino:data3', function (dataSerial3) {
         // console.log(dataSerial);
-        if(dataSerial3.value === "-1"){
-          document.getElementById("disconnected").innerHTML="Sensor de movimiento desconectado";
-          document.getElementById("disconnected").style.visibility="visible";
-          ok3 = 0;
-        }else{
-          ok3 = 1;
-        }
-        if(ok0 == 1 && ok1 == 1 && ok2 == 1 && ok3 == 1){
-          document.getElementById("disconnected").style.visibility="hidden";
-        }
-        data_array3.shift();data_array3.push(dataSerial3.value);
-        
-        chart3.data.labels = [1,2,3,4,5,6,7,8,9,10];
+        chart3.data.labels.push(counter3);
         chart3.data.datasets.forEach(dataset => {
-          dataset.data = data_array3;
+          dataset.data.push(dataSerial3.value);
         });
+        counter3++;
         chart3.update();
       });
-  
-      
-      /*
+
       var chart4 = new Chart(ctx4, {
           // The type of chart we want to create
           type: 'line',
@@ -231,17 +181,13 @@
       let counter4 = 0 ;
       socket.on('arduino:data4', function (dataSerial4) {
         // console.log(dataSerial);
-        if(dataSerial4.value === "-1"){
-          document.getElementById("disconnected").innerHTML="A5 is disconnected";
-          document.getElementById("disconnected").style.visibility="visible";
-        }
         chart4.data.labels.push(counter4);
         chart4.data.datasets.forEach(dataset => {
           dataset.data.push(dataSerial4.value);
         });
         counter4++;
         chart4.update();
-      });*/
+      });
     </script>
   </body>
 </html>
